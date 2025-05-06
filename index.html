@@ -1,10 +1,10 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Um presente digital cheio de amor e carinho para o Dia das Mães - feito por filhos que te amam!">
   <title>Presente Especial para Ana</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/833/833472.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     @keyframes float {
@@ -32,56 +32,209 @@
       background: linear-gradient(135deg, #f0f7ff 0%, #e0f0ff 100%);
       border-left: 5px solid #4a6baf;
     }
-    @keyframes popUp {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .popup { animation: popUp 0.5s ease forwards; }
   </style>
 </head>
 <body class="bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen font-sans relative overflow-x-hidden">
-  <!-- Modal inicial -->
-  <div id="modalBoasVindas" class="fixed inset-0 bg-white bg-opacity-95 flex items-center justify-center z-50">
-    <div class="text-center max-w-md px-6 py-8 bg-white rounded-xl shadow-xl popup">
-      <h2 class="text-3xl font-bold text-pink-600 mb-4">Feliz Dia das Mães, Ana!</h2>
-      <p class="text-gray-600 mb-6">Este presente foi feito com muito amor. Clique para abrir e sorrir!</p>
-      <button onclick="abrirPresente()" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-xl text-lg shadow-md">Abrir Presente</button>
-    </div>
+  <div class="container mx-auto px-4 py-8 relative z-10">
+    <header class="text-center mb-8">
+      <div class="heart-beat inline-block">
+        <i class="fas fa-heart text-red-500 text-5xl"></i>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-pink-600 mt-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600">
+        Presente Especial para Ana
+      </h1>
+      <p class="text-purple-600 mt-2 text-lg">Um presente cheio de amor para você, mamãe!</p>
+    </header>
+
+    <main class="max-w-3xl mx-auto">
+      <div id="fraseContainer" class="bg-white rounded-2xl shadow-xl p-6 mb-8 text-center min-h-48 flex flex-col items-center justify-center photo-frame">
+        <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed">
+          Do que você precisa hoje?
+        </p>
+        <p id="fraseAutor" class="text-pink-500 mt-2 font-medium hidden">~ Seus filhos amorosos</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <button onclick="mostrarFrase('biblia')" class="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
+          <i class="fas fa-bible text-3xl mb-3"></i>
+          <span class="font-medium text-center">Um presente direto do céu</span>
+        </button>
+        <button onclick="mostrarFrase('amor')" class="bg-pink-500 hover:bg-pink-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
+          <i class="fas fa-heart text-3xl mb-3"></i>
+          <span class="font-medium text-center">Coisas que Amamos em Você</span>
+        </button>
+        <button onclick="mostrarFrase('motivacional')" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
+          <i class="fas fa-sun text-3xl mb-3"></i>
+          <span class="font-medium text-center">Frase Motivacional do Dia</span>
+        </button>
+        <button onclick="mostrarFrase('memorias')" class="bg-purple-500 hover:bg-purple-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
+          <i class="fas fa-images text-3xl mb-3"></i>
+          <span class="font-medium text-center">Uma memória feliz</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <button onclick="surpresa()" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-8 py-4 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 text-lg font-medium">
+          <i class="fas fa-magic mr-3"></i> Surpreenda-me!
+        </button>
+        <button onclick="playRandomSong()" class="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-8 py-4 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 text-lg font-medium">
+          <i class="fas fa-music mr-3"></i> Trilha sonora de hoje
+        </button>
+      </div>
+    </main>
+
+    <footer class="text-center mt-12 text-gray-500 text-sm">
+      <p>Feito com <i class="fas fa-heart text-red-500"></i> por seus filhos (com ajuda do genro) para a melhor mãe do mundo!</p>
+      <p class="mt-1">© <span id="anoAtual"></span> - Um presente digital cheio de amor</p>
+    </footer>
   </div>
-  
-  <!-- Caixa de presente -->
-  <div id="caixaPresente" class="fixed inset-0 bg-white bg-opacity-90 flex items-center justify-center z-40 hidden">
-    <div class="text-center">
-      <div class="text-6xl animate-bounce">🎁</div>
-      <p class="mt-4 text-lg text-gray-700">Abrindo seu presente...</p>
-    </div>
-  </div>
 
-  <!-- Sininho -->
-  <audio id="sininhoAudio" src="https://assets.mixkit.co/sfx/preview/mixkit-bell-notification-933.mp3"></audio>
+  <audio id="bgMusic"></audio>
+  <p id="songTitle" class="text-center mt-4 text-sm text-blue-600"></p>
 
-<script>
-function abrirPresente() {
-  document.getElementById('modalBoasVindas').classList.add('hidden');
-  document.getElementById('caixaPresente').classList.remove('hidden');
-  setTimeout(() => {
-    document.getElementById('caixaPresente').classList.add('hidden');
-  }, 2000);
-}
+ <script>
+const API_KEY = "AIzaSyD1CIKaD9c0quCWk1Hv0YA3kOfWo4md5tE";
+const FOLDER_ID_FOTOS = "10MdTNnk42jl0XOrTv6EWY4WVdnlSO5Sl";
+const FOLDER_ID_MUSICAS = "1NTGPQHiKvAeu8ixLpuE6DCqsWNe1ooR5";
 
-function tocarSininho() {
-  const sino = document.getElementById('sininhoAudio');
-  if (sino) {
-    sino.currentTime = 0;
-    sino.play().catch(() => {});
+let fotosMemorias = [];
+let musicas = [];
+
+const sheetsUrls = {
+  biblia: 'https://docs.google.com/spreadsheets/d/1WU3RNNRilrYhIDWFIwBTWKzD9zsWFChuDs8AOHTvAqo/gviz/tq?',
+  amor: 'https://docs.google.com/spreadsheets/d/12cIYDymlpyvjWLNp4WQQz5-dJdsaNlFNR1dZRacOmlo/gviz/tq?',
+  motivacional: 'https://docs.google.com/spreadsheets/d/1cHL8zGZ_HsQXnKKC6edMpsDfd6MJdKfh9CAJXi4efYM/gviz/tq?'
+};
+
+const dadosCache = {
+  biblia: [],
+  amor: [],
+  motivacional: []
+};
+
+const ultimaFrase = {
+  biblia: null,
+  amor: null,
+  motivacional: null
+};
+
+async function listarArquivos(folderId, mimeFilter) {
+  try {
+    const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'${mimeFilter}'&key=${API_KEY}&fields=files(id,name,mimeType)`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.files.map(file => ({
+      id: file.id,
+      name: file.name,
+      mimeType: file.mimeType,
+      url: `https://drive.google.com/uc?id=${file.id}&export=download`
+    }));
+  } catch (error) {
+    alert('Ops, não conseguimos carregar as mídias agora. Fala com a gente pra resolver.');
+    return [];
   }
 }
 
-// adicionar sininho aos botões
-window.addEventListener('DOMContentLoaded', () => {
-  const botoes = document.querySelectorAll('button[onclick^="mostrarFrase"]');
-  botoes.forEach(btn => {
-    btn.addEventListener('click', tocarSininho);
+async function carregarMidias() {
+  fotosMemorias = await listarArquivos(FOLDER_ID_FOTOS, 'image/');
+  musicas = await listarArquivos(FOLDER_ID_MUSICAS, 'audio/');
+}
+
+async function carregarTodosDados() {
+  for (const tipo of Object.keys(sheetsUrls)) {
+    try {
+      const response = await fetch(sheetsUrls[tipo]);
+      const text = await response.text();
+      const json = JSON.parse(text.substring(47).slice(0, -2));
+      const rows = json.table.rows;
+      const dados = [];
+
+      for (let i = 1; i < rows.length; i++) {
+        const cell = rows[i].c;
+        if (cell[0] && cell[1]) {
+          dados.push({ texto: cell[0].v, subtitulo: cell[1].v });
+        }
+      }
+      dadosCache[tipo] = dados;
+    } catch (e) {
+      alert(`Erro ao carregar planilha de ${tipo}`);
+    }
+  }
+}
+
+function escolherDadoAleatorio(dados, tipo) {
+  if (dados.length <= 1) return dados[0];
+  let candidato;
+  do {
+    candidato = dados[Math.floor(Math.random() * dados.length)];
+  } while (JSON.stringify(candidato) === JSON.stringify(ultimaFrase[tipo]));
+  ultimaFrase[tipo] = candidato;
+  return candidato;
+}
+
+async function mostrarFrase(tipo) {
+  const container = document.getElementById('fraseContainer');
+  container.classList.remove('bible-verse', 'bg-white');
+
+  try {
+    container.innerHTML = `<p class="text-gray-700 text-xl italic">Carregando...</p>`;
+
+    if (tipo === 'memorias') {
+      if (!fotosMemorias.length) throw new Error('Nenhuma foto encontrada');
+      const foto = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
+      const imgUrl = `https://lh3.googleusercontent.com/d/${foto.id}=w1200`;
+      container.innerHTML = `<img src="${imgUrl}" class="w-full h-auto rounded-xl object-contain">`;
+      return;
+    }
+
+    const dados = dadosCache[tipo];
+    if (!dados || dados.length === 0) throw new Error(`Sem dados para ${tipo}`);
+    const item = escolherDadoAleatorio(dados, tipo);
+
+    if (tipo === 'biblia') {
+      container.classList.add('bible-verse');
+    } else {
+      container.classList.add('bg-gradient-to-r', 'from-purple-50', 'to-pink-50', 'border-2', 'border-pink-200');
+    }
+
+    container.innerHTML = `
+      <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed fade-in">
+        "${item.texto}"
+      </p>
+      <p id="fraseAutor" class="text-pink-500 mt-2 font-medium fade-in">~ ${item.subtitulo}</p>
+    `;
+  } catch (e) {
+    alert('Ops, algo deu errado.');
+    container.innerHTML = `<p class="text-red-500 text-xl font-bold">Erro ao carregar conteúdo</p>`;
+  }
+}
+
+function surpresa() {
+  const tipos = ['biblia', 'amor', 'motivacional', 'memorias'];
+  const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+  mostrarFrase(tipo);
+}
+
+function playRandomSong() {
+  const musicPlayer = document.getElementById('bgMusic');
+  const title = document.getElementById('songTitle');
+  if (!musicas.length) {
+    alert('Ops, nenhuma música disponível no momento.');
+    return;
+  }
+  const musica = musicas[Math.floor(Math.random() * musicas.length)];
+  musicPlayer.src = musica.url;
+  title.textContent = musica.name;
+  musicPlayer.play().catch(() => {
+    alert('Ops, não conseguimos tocar essa música.');
   });
-});
+}
+
+document.getElementById('anoAtual').textContent = new Date().getFullYear();
+window.onload = async () => {
+  await carregarMidias();
+  await carregarTodosDados();
+};
 </script>
+</body>
+</html>
