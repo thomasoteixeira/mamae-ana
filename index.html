@@ -122,61 +122,91 @@
       musicas = await listarArquivos(FOLDER_ID_MUSICAS, 'audio/');
     }
 
-    const sheetsUrls = {
-      biblia: 'https://docs.google.com/spreadsheets/d/1WU3RNNRilrYhIDWFIwBTWKzD9zsWFChuDs8AOHTvAqo/gviz/tq?',
-      amor: 'https://docs.google.com/spreadsheets/d/12cIYDymlpyvjWLNp4WQQz5-dJdsaNlFNR1dZRacOmlo/gviz/tq?',
-      motivacional: 'https://docs.google.com/spreadsheets/d/1cHL8zGZ_HsQXnKKC6edMpsDfd6MJdKfh9CAJXi4efYM/gviz/tq?'
-    };
+const sheetsUrls = {
+  biblia: 'https://docs.google.com/spreadsheets/d/1WU3RNNRilrYhIDWFIwBTWKzD9zsWFChuDs8AOHTvAqo/gviz/tq?',
+  amor: 'https://docs.google.com/spreadsheets/d/12cIYDymlpyvjWLNp4WQQz5-dJdsaNlFNR1dZRacOmlo/gviz/tq?',
+  motivacional: 'https://docs.google.com/spreadsheets/d/1cHL8zGZ_HsQXnKKC6edMpsDfd6MJdKfh9CAJXi4efYM/gviz/tq?'
+};
 
-    async function buscarDadosPlanilha(tipo) {
-      try {
-        const response = await fetch(sheetsUrls[tipo]);
-        const text = await response.text();
-        const json = JSON.parse(text.substring(47).slice(0, -2));
-        const rows = json.table.rows;
-        const dados = [];
-        for (let i = 1; i < rows.length; i++) {
-          const cell = rows[i].c;
-          if (tipo === 'biblia') {
-            if (cell[0] && cell[1]) dados.push({ texto: cell[0].v, referencia: cell[1].v });
-          } else {
-            if (cell[0]) dados.push(cell[0].v);
-          }
+const dadosCache = {
+  biblia: [],
+  amor: [],
+  motivacional: []
+};
+
+async function carregarTodosDados() {
+  for (const tipo of Object.keys(sheetsUrls)) {
+    try {
+      const response = await fetch(sheetsUrls[tipo]);
+      const text = await response.text();
+      const json = JSON.parse(text.substring(47).slice(0, -2));
+      const rows = json.table.rows;
+      const dados = [];
+
+      for (let i = 1; i < rows.length; i++) {
+        const cell = rows[i].c;
+        if (tipo === 'biblia') {
+          if (cell[0] && cell[1]) dados.push({ texto: cell[0].v, referencia: cell[1].v });
+        } else {
+          if (cell[0]) dados.push(cell[0].v);
         }
-        if (dados.length === 0) throw new Error();
-        return dados;
-      } catch (err) {
-        alert('Ops, não conseguimos carregar as frases agora. Fala com a gente pra resolver.');
-        throw err;
       }
+      dadosCache[tipo] = dados;
+    } catch (e) {
+      alert(`Erro ao carregar planilha de ${tipo}`);
+    }
+  }
+}
+
+async function mostrarFrase(tipo) {
+  const container = document.getElementById('fraseContainer');
+  container.classList.remove('bible-verse', 'bg-white');
+
+  try {
+    container.innerHTML = `<p class="text-gray-700 text-xl italic">Carregando...</p>`;
+
+    if (tipo === 'memorias') {
+      if (!fotosMemorias.length) throw new Error('Nenhuma foto encontrada');
+      const foto = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
+      const imgUrl = `https://lh3.googleusercontent.com/d/${foto.id}=w1200`;
+      container.innerHTML = `<img src="${imgUrl}" class="w-full h-auto rounded-xl object-contain">`;
+      return;
     }
 
-    async function mostrarFrase(tipo) {
-      const container = document.getElementById('fraseContainer');
-      try {
-        if (tipo === 'memorias') {
-          if (!fotosMemorias.length) throw new Error('Nenhuma foto encontrada');
-          const foto = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
-          const imgUrl = `https://lh3.googleusercontent.com/d/${foto.id}=w1200`;
-          container.innerHTML = `<img src="${imgUrl}" class="w-full h-auto rounded-xl object-contain">`;
-          return;
-        }
-        const dados = await buscarDadosPlanilha(tipo);
-        const item = dados[Math.floor(Math.random() * dados.length)];
-        container.innerHTML = tipo === 'biblia'
-          ? `<p class="text-gray-700 text-xl">"${item.texto}"</p><p class="text-pink-500 mt-2 font-medium">~ ${item.referencia}</p>`
-          : `<p class="text-gray-700 text-xl">"${item}"</p><p class="text-pink-500 mt-2 font-medium">~ ${tipo}</p>`;
-      } catch (e) {
-        alert('Ops, algo deu errado, mãe. Melhor falar com a gente pra consertar.');
-        container.innerHTML = `<p class="text-red-500 text-xl font-bold">Erro ao carregar conteúdo</p>`;
-      }
-    }
+    const dados = dadosCache[tipo];
+    if (!dados || dados.length === 0) throw new Error(`Sem dados para ${tipo}`);
 
-    function surpresa() {
-      const tipos = ['biblia', 'amor', 'motivacional', 'memorias'];
-      const tipo = tipos[Math.floor(Math.random() * tipos.length)];
-      mostrarFrase(tipo);
+    if (tipo === 'biblia') {
+      const item = dados[Math.floor(Math.random() * dados.length)];
+      container.classList.add('bible-verse');
+      container.innerHTML = `
+        <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed fade-in">
+          "${item.texto}"
+        </p>
+        <p id="fraseAutor" class="text-pink-500 mt-2 font-medium fade-in">~ ${item.referencia}</p>
+      `;
+    } else {
+      const texto = dados[Math.floor(Math.random() * dados.length)];
+      const subtitulo = tipo === 'amor' ? 'Coisas que amamos em você' : 'Para motivar seu dia';
+      container.classList.add('bg-gradient-to-r', 'from-purple-50', 'to-pink-50', 'border-2', 'border-pink-200');
+      container.innerHTML = `
+        <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed fade-in">
+          "${texto}"
+        </p>
+        <p id="fraseAutor" class="text-pink-500 mt-2 font-medium fade-in">~ ${subtitulo}</p>
+      `;
     }
+  } catch (e) {
+    alert('Ops, algo deu errado.');
+    container.innerHTML = `<p class="text-red-500 text-xl font-bold">Erro ao carregar conteúdo</p>`;
+  }
+}
+
+window.onload = async () => {
+  document.getElementById('anoAtual').textContent = new Date().getFullYear();
+  await carregarMidias();
+  await carregarTodosDados();
+}
 
     function playRandomSong() {
       const musicPlayer = document.getElementById('bgMusic');
