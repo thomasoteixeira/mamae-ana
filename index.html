@@ -157,7 +157,8 @@
         if (tipo === 'memorias') {
           if (!fotosMemorias.length) throw new Error('Nenhuma foto encontrada');
           const foto = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
-          container.innerHTML = `<img src="${foto.url}" class="w-full h-48 object-cover rounded-xl">`;
+          const thumbUrl = `https://drive.google.com/thumbnail?id=${foto.id}`;
+          container.innerHTML = `<img src="${thumbUrl}" class="w-full h-48 object-cover rounded-xl">`;
           return;
         }
         const dados = await buscarDadosPlanilha(tipo);
