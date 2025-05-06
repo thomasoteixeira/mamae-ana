@@ -6,23 +6,87 @@
   <title>Presente Especial para Ana</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+    .floating { animation: float 3s ease-in-out infinite; }
+    .heart-beat { animation: heartbeat 1.5s ease infinite; }
+    @keyframes heartbeat {
+      0%, 50%, 100% { transform: scale(1); }
+      25%, 75% { transform: scale(1.1); }
+    }
+    .fade-in { animation: fadeIn 0.8s ease-in; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .photo-frame {
+      background: linear-gradient(135deg, #f9d5e5 0%, #e3c1f5 100%);
+      border: 8px solid white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .bible-verse {
+      background: linear-gradient(135deg, #f0f7ff 0%, #e0f0ff 100%);
+      border-left: 5px solid #4a6baf;
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen font-sans">
-  <div id="fraseContainer" class="bg-white rounded-2xl shadow-xl p-6 mb-8 text-center min-h-48 flex flex-col items-center justify-center">
-    <p id="fraseExibida" class="text-gray-700 text-xl italic">Do que você precisa hoje?</p>
-    <p id="fraseAutor" class="text-pink-500 mt-2 font-medium hidden">~ Seus filhos amorosos</p>
-  </div>
+<body class="bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen font-sans relative overflow-x-hidden">
+  <div class="container mx-auto px-4 py-8 relative z-10">
+    <header class="text-center mb-8">
+      <div class="heart-beat inline-block">
+        <i class="fas fa-heart text-red-500 text-5xl"></i>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold text-pink-600 mt-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600">
+        Presente Especial para Ana
+      </h1>
+      <p class="text-purple-600 mt-2 text-lg">Um presente cheio de amor para você, mamãe!</p>
+    </header>
 
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    <button onclick="mostrarFrase('biblia')" class="bg-blue-500 text-white rounded-xl py-5 px-3"><i class="fas fa-bible text-2xl"></i><br>Bíblia</button>
-    <button onclick="mostrarFrase('amor')" class="bg-pink-500 text-white rounded-xl py-5 px-3"><i class="fas fa-heart text-2xl"></i><br>Amor</button>
-    <button onclick="mostrarFrase('motivacional')" class="bg-yellow-500 text-white rounded-xl py-5 px-3"><i class="fas fa-sun text-2xl"></i><br>Motivacional</button>
-    <button onclick="mostrarFrase('memorias')" class="bg-purple-500 text-white rounded-xl py-5 px-3"><i class="fas fa-images text-2xl"></i><br>Memórias</button>
-  </div>
+    <main class="max-w-3xl mx-auto">
+      <div id="fraseContainer" class="bg-white rounded-2xl shadow-xl p-6 mb-8 text-center min-h-48 flex flex-col items-center justify-center photo-frame">
+        <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed">
+          Do que você precisa hoje?
+        </p>
+        <p id="fraseAutor" class="text-pink-500 mt-2 font-medium hidden">~ Seus filhos amorosos</p>
+      </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <button onclick="surpresa()" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-4 rounded-xl"><i class="fas fa-magic mr-2"></i> Surpreenda-me!</button>
-    <button onclick="playRandomSong()" class="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-6 py-4 rounded-xl"><i class="fas fa-music mr-2"></i> Trilha sonora</button>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <button onclick="mostrarFrase('biblia')" class="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
+          <i class="fas fa-bible text-3xl mb-3"></i>
+          <span class="font-medium text-center">Um presente direto do céu</span>
+        </button>
+        <button onclick="mostrarFrase('amor')" class="bg-pink-500 hover:bg-pink-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
+          <i class="fas fa-heart text-3xl mb-3"></i>
+          <span class="font-medium text-center">Coisas que Amamos em Você</span>
+        </button>
+        <button onclick="mostrarFrase('motivacional')" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
+          <i class="fas fa-sun text-3xl mb-3"></i>
+          <span class="font-medium text-center">Frase Motivacional do Dia</span>
+        </button>
+        <button onclick="mostrarFrase('memorias')" class="bg-purple-500 hover:bg-purple-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
+          <i class="fas fa-images text-3xl mb-3"></i>
+          <span class="font-medium text-center">Uma memória feliz</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <button onclick="surpresa()" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-8 py-4 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 text-lg font-medium">
+          <i class="fas fa-magic mr-3"></i> Surpreenda-me!
+        </button>
+        <button onclick="playRandomSong()" class="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-8 py-4 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 text-lg font-medium">
+          <i class="fas fa-music mr-3"></i> Trilha sonora de hoje
+        </button>
+      </div>
+    </main>
+
+    <footer class="text-center mt-12 text-gray-500 text-sm">
+      <p>Feito com <i class="fas fa-heart text-red-500"></i> por seus filhos para a melhor mãe do mundo!</p>
+      <p class="mt-1">© <span id="anoAtual"></span> - Um presente digital cheio de amor</p>
+    </footer>
   </div>
 
   <audio id="bgMusic"></audio>
@@ -48,7 +112,6 @@
           url: `https://drive.google.com/uc?id=${file.id}&export=download`
         }));
       } catch (error) {
-        console.error('Erro ao listar arquivos da pasta:', error);
         alert('Ops, não conseguimos carregar as mídias agora. Fala com a gente pra resolver.');
         return [];
       }
@@ -83,7 +146,6 @@
         if (dados.length === 0) throw new Error();
         return dados;
       } catch (err) {
-        console.error('Erro ao carregar dados da planilha:', err);
         alert('Ops, não conseguimos carregar as frases agora. Fala com a gente pra resolver.');
         throw err;
       }
@@ -104,7 +166,6 @@
           ? `<p class="text-gray-700 text-xl">"${item.texto}"</p><p class="text-pink-500 mt-2 font-medium">~ ${item.referencia}</p>`
           : `<p class="text-gray-700 text-xl">"${item}"</p><p class="text-pink-500 mt-2 font-medium">~ ${tipo}</p>`;
       } catch (e) {
-        console.error('Erro ao mostrar frase:', e);
         alert('Ops, algo deu errado, mãe. Melhor falar com a gente pra consertar.');
         container.innerHTML = `<p class="text-red-500 text-xl font-bold">Erro ao carregar conteúdo</p>`;
       }
@@ -126,12 +187,12 @@
       const musica = musicas[Math.floor(Math.random() * musicas.length)];
       musicPlayer.src = musica.url;
       title.textContent = musica.name;
-      musicPlayer.play().catch((err) => {
-        console.error('Erro ao tocar música:', err);
+      musicPlayer.play().catch(() => {
         alert('Ops, não conseguimos tocar essa música.');
       });
     }
 
+    document.getElementById('anoAtual').textContent = new Date().getFullYear();
     window.onload = carregarMidias;
   </script>
 </body>
