@@ -92,35 +92,13 @@
   <audio id="bgMusic"></audio>
   <p id="songTitle" class="text-center mt-4 text-sm text-blue-600"></p>
 
-  <script>
-    const API_KEY = "AIzaSyD1CIKaD9c0quCWk1Hv0YA3kOfWo4md5tE";
-    const FOLDER_ID_FOTOS = "10MdTNnk42jl0XOrTv6EWY4WVdnlSO5Sl";
-    const FOLDER_ID_MUSICAS = "1NTGPQHiKvAeu8ixLpuE6DCqsWNe1ooR5";
+ <script>
+const API_KEY = "AIzaSyD1CIKaD9c0quCWk1Hv0YA3kOfWo4md5tE";
+const FOLDER_ID_FOTOS = "10MdTNnk42jl0XOrTv6EWY4WVdnlSO5Sl";
+const FOLDER_ID_MUSICAS = "1NTGPQHiKvAeu8ixLpuE6DCqsWNe1ooR5";
 
-    let fotosMemorias = [];
-    let musicas = [];
-
-    async function listarArquivos(folderId, mimeFilter) {
-      try {
-        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'${mimeFilter}'&key=${API_KEY}&fields=files(id,name,mimeType)`;
-        const response = await fetch(url);
-        const data = await response.json();
-        return data.files.map(file => ({
-          id: file.id,
-          name: file.name,
-          mimeType: file.mimeType,
-          url: `https://drive.google.com/uc?id=${file.id}&export=download`
-        }));
-      } catch (error) {
-        alert('Ops, não conseguimos carregar as mídias agora. Fala com a gente pra resolver.');
-        return [];
-      }
-    }
-
-    async function carregarMidias() {
-      fotosMemorias = await listarArquivos(FOLDER_ID_FOTOS, 'image/');
-      musicas = await listarArquivos(FOLDER_ID_MUSICAS, 'audio/');
-    }
+let fotosMemorias = [];
+let musicas = [];
 
 const sheetsUrls = {
   biblia: 'https://docs.google.com/spreadsheets/d/1WU3RNNRilrYhIDWFIwBTWKzD9zsWFChuDs8AOHTvAqo/gviz/tq?',
@@ -133,6 +111,28 @@ const dadosCache = {
   amor: [],
   motivacional: []
 };
+
+async function listarArquivos(folderId, mimeFilter) {
+  try {
+    const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'${mimeFilter}'&key=${API_KEY}&fields=files(id,name,mimeType)`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.files.map(file => ({
+      id: file.id,
+      name: file.name,
+      mimeType: file.mimeType,
+      url: `https://drive.google.com/uc?id=${file.id}&export=download`
+    }));
+  } catch (error) {
+    alert('Ops, não conseguimos carregar as mídias agora. Fala com a gente pra resolver.');
+    return [];
+  }
+}
+
+async function carregarMidias() {
+  fotosMemorias = await listarArquivos(FOLDER_ID_FOTOS, 'image/');
+  musicas = await listarArquivos(FOLDER_ID_MUSICAS, 'audio/');
+}
 
 async function carregarTodosDados() {
   for (const tipo of Object.keys(sheetsUrls)) {
@@ -202,29 +202,32 @@ async function mostrarFrase(tipo) {
   }
 }
 
-window.onload = async () => {
-  document.getElementById('anoAtual').textContent = new Date().getFullYear();
-  await carregarMidias();
-  await carregarTodosDados();
+function surpresa() {
+  const tipos = ['biblia', 'amor', 'motivacional', 'memorias'];
+  const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+  mostrarFrase(tipo);
 }
 
-    function playRandomSong() {
-      const musicPlayer = document.getElementById('bgMusic');
-      const title = document.getElementById('songTitle');
-      if (!musicas.length) {
-        alert('Ops, nenhuma música disponível no momento.');
-        return;
-      }
-      const musica = musicas[Math.floor(Math.random() * musicas.length)];
-      musicPlayer.src = musica.url;
-      title.textContent = musica.name;
-      musicPlayer.play().catch(() => {
-        alert('Ops, não conseguimos tocar essa música.');
-      });
-    }
+function playRandomSong() {
+  const musicPlayer = document.getElementById('bgMusic');
+  const title = document.getElementById('songTitle');
+  if (!musicas.length) {
+    alert('Ops, nenhuma música disponível no momento.');
+    return;
+  }
+  const musica = musicas[Math.floor(Math.random() * musicas.length)];
+  musicPlayer.src = musica.url;
+  title.textContent = musica.name;
+  musicPlayer.play().catch(() => {
+    alert('Ops, não conseguimos tocar essa música.');
+  });
+}
 
-    document.getElementById('anoAtual').textContent = new Date().getFullYear();
-    window.onload = carregarMidias;
-  </script>
+document.getElementById('anoAtual').textContent = new Date().getFullYear();
+window.onload = async () => {
+  await carregarMidias();
+  await carregarTodosDados();
+};
+</script>
 </body>
 </html>
