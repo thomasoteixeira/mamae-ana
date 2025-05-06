@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -38,15 +37,21 @@
     let musicas = [];
 
     async function listarArquivos(folderId, mimeFilter) {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'${mimeFilter}'&key=${API_KEY}&fields=files(id,name,mimeType)`;
-      const response = await fetch(url);
-      const data = await response.json();
-      return data.files.map(file => ({
-        id: file.id,
-        name: file.name,
-        mimeType: file.mimeType,
-        url: `https://drive.google.com/uc?id=${file.id}&export=download`
-      }));
+      try {
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'${mimeFilter}'&key=${API_KEY}&fields=files(id,name,mimeType)`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.files.map(file => ({
+          id: file.id,
+          name: file.name,
+          mimeType: file.mimeType,
+          url: `https://drive.google.com/uc?id=${file.id}&export=download`
+        }));
+      } catch (error) {
+        console.error('Erro ao listar arquivos da pasta:', error);
+        alert('Ops, não conseguimos carregar as mídias agora. Fala com a gente pra resolver.');
+        return [];
+      }
     }
 
     async function carregarMidias() {
@@ -77,8 +82,10 @@
         }
         if (dados.length === 0) throw new Error();
         return dados;
-      } catch {
-        throw new Error('Erro ao carregar dados');
+      } catch (err) {
+        console.error('Erro ao carregar dados da planilha:', err);
+        alert('Ops, não conseguimos carregar as frases agora. Fala com a gente pra resolver.');
+        throw err;
       }
     }
 
@@ -86,6 +93,7 @@
       const container = document.getElementById('fraseContainer');
       try {
         if (tipo === 'memorias') {
+          if (!fotosMemorias.length) throw new Error('Nenhuma foto encontrada');
           const foto = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
           container.innerHTML = `<img src="${foto.url}" class="w-full h-48 object-cover rounded-xl">`;
           return;
@@ -95,8 +103,10 @@
         container.innerHTML = tipo === 'biblia'
           ? `<p class="text-gray-700 text-xl">"${item.texto}"</p><p class="text-pink-500 mt-2 font-medium">~ ${item.referencia}</p>`
           : `<p class="text-gray-700 text-xl">"${item}"</p><p class="text-pink-500 mt-2 font-medium">~ ${tipo}</p>`;
-      } catch {
-        container.innerHTML = `<p class="text-red-500 text-xl font-bold">Ops, algo deu errado, mãe.</p><p class="text-gray-700 mt-2">Melhor falar com a gente pra consertar.</p>`;
+      } catch (e) {
+        console.error('Erro ao mostrar frase:', e);
+        alert('Ops, algo deu errado, mãe. Melhor falar com a gente pra consertar.');
+        container.innerHTML = `<p class="text-red-500 text-xl font-bold">Erro ao carregar conteúdo</p>`;
       }
     }
 
@@ -109,10 +119,17 @@
     function playRandomSong() {
       const musicPlayer = document.getElementById('bgMusic');
       const title = document.getElementById('songTitle');
+      if (!musicas.length) {
+        alert('Ops, nenhuma música disponível no momento.');
+        return;
+      }
       const musica = musicas[Math.floor(Math.random() * musicas.length)];
       musicPlayer.src = musica.url;
       title.textContent = musica.name;
-      musicPlayer.play().catch(() => alert('Erro ao tocar música.'));
+      musicPlayer.play().catch((err) => {
+        console.error('Erro ao tocar música:', err);
+        alert('Ops, não conseguimos tocar essa música.');
+      });
     }
 
     window.onload = carregarMidias;
