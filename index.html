@@ -112,6 +112,12 @@ const dadosCache = {
   motivacional: []
 };
 
+const ultimaFrase = {
+  biblia: null,
+  amor: null,
+  motivacional: null
+};
+
 async function listarArquivos(folderId, mimeFilter) {
   try {
     const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'${mimeFilter}'&key=${API_KEY}&fields=files(id,name,mimeType)`;
@@ -145,10 +151,8 @@ async function carregarTodosDados() {
 
       for (let i = 1; i < rows.length; i++) {
         const cell = rows[i].c;
-        if (tipo === 'biblia') {
-          if (cell[0] && cell[1]) dados.push({ texto: cell[0].v, referencia: cell[1].v });
-        } else {
-          if (cell[0]) dados.push(cell[0].v);
+        if (cell[0] && cell[1]) {
+          dados.push({ texto: cell[0].v, subtitulo: cell[1].v });
         }
       }
       dadosCache[tipo] = dados;
@@ -156,6 +160,16 @@ async function carregarTodosDados() {
       alert(`Erro ao carregar planilha de ${tipo}`);
     }
   }
+}
+
+function escolherDadoAleatorio(dados, tipo) {
+  if (dados.length <= 1) return dados[0];
+  let candidato;
+  do {
+    candidato = dados[Math.floor(Math.random() * dados.length)];
+  } while (JSON.stringify(candidato) === JSON.stringify(ultimaFrase[tipo]));
+  ultimaFrase[tipo] = candidato;
+  return candidato;
 }
 
 async function mostrarFrase(tipo) {
@@ -175,27 +189,20 @@ async function mostrarFrase(tipo) {
 
     const dados = dadosCache[tipo];
     if (!dados || dados.length === 0) throw new Error(`Sem dados para ${tipo}`);
+    const item = escolherDadoAleatorio(dados, tipo);
 
     if (tipo === 'biblia') {
-      const item = dados[Math.floor(Math.random() * dados.length)];
       container.classList.add('bible-verse');
-      container.innerHTML = `
-        <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed fade-in">
-          "${item.texto}"
-        </p>
-        <p id="fraseAutor" class="text-pink-500 mt-2 font-medium fade-in">~ ${item.referencia}</p>
-      `;
     } else {
-      const texto = dados[Math.floor(Math.random() * dados.length)];
-      const subtitulo = tipo === 'amor' ? 'Coisas que amamos em você' : 'Para motivar seu dia';
       container.classList.add('bg-gradient-to-r', 'from-purple-50', 'to-pink-50', 'border-2', 'border-pink-200');
-      container.innerHTML = `
-        <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed fade-in">
-          "${texto}"
-        </p>
-        <p id="fraseAutor" class="text-pink-500 mt-2 font-medium fade-in">~ ${subtitulo}</p>
-      `;
     }
+
+    container.innerHTML = `
+      <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed fade-in">
+        "${item.texto}"
+      </p>
+      <p id="fraseAutor" class="text-pink-500 mt-2 font-medium fade-in">~ ${item.subtitulo}</p>
+    `;
   } catch (e) {
     alert('Ops, algo deu errado.');
     container.innerHTML = `<p class="text-red-500 text-xl font-bold">Erro ao carregar conteúdo</p>`;
