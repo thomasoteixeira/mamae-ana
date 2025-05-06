@@ -1,174 +1,121 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presente Especial para Ana</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presente Especial para Ana</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen font-sans relative overflow-x-hidden">
-    <div id="backgroundEffects"></div>
-    <audio id="bgMusic"></audio>
-    <div id="nowPlaying" class="hidden fixed bottom-4 left-4 right-4 bg-white rounded-xl shadow-xl p-4 max-w-md mx-auto z-50">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm text-gray-500">Tocando agora:</p>
-                <p id="songTitle" class="font-medium text-blue-600"></p>
-            </div>
-            <div class="flex items-center space-x-3">
-                <button id="prevBtn"><i class="fas fa-step-backward text-blue-500"></i></button>
-                <button id="playPauseBtn" class="bg-blue-500 text-white rounded-full p-2"><i class="fas fa-play"></i></button>
-                <button id="nextBtn"><i class="fas fa-step-forward text-blue-500"></i></button>
-            </div>
-        </div>
-    </div>
+<body class="bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen font-sans">
+  <div id="fraseContainer" class="bg-white rounded-2xl shadow-xl p-6 mb-8 text-center min-h-48 flex flex-col items-center justify-center">
+    <p id="fraseExibida" class="text-gray-700 text-xl italic">Do que você precisa hoje?</p>
+    <p id="fraseAutor" class="text-pink-500 mt-2 font-medium hidden">~ Seus filhos amorosos</p>
+  </div>
 
-    <div class="container mx-auto px-4 py-8 relative z-10">
-        <header class="text-center mb-8">
-            <div class="heart-beat inline-block">
-                <i class="fas fa-heart text-red-500 text-5xl"></i>
-            </div>
-            <h1 class="text-4xl font-bold text-pink-600 mt-4">Presente Especial para Ana</h1>
-            <p class="text-purple-600 mt-2">Um presente cheio de amor para você, mamãe!</p>
-            <button id="musicBtn" onclick="toggleMusic()" class="mt-4 bg-white rounded-full p-3 shadow-md"><i class="fas fa-music text-purple-500 text-xl"></i></button>
-        </header>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <button onclick="mostrarFrase('biblia')" class="bg-blue-500 text-white rounded-xl py-5 px-3"><i class="fas fa-bible text-2xl"></i><br>Bíblia</button>
+    <button onclick="mostrarFrase('amor')" class="bg-pink-500 text-white rounded-xl py-5 px-3"><i class="fas fa-heart text-2xl"></i><br>Amor</button>
+    <button onclick="mostrarFrase('motivacional')" class="bg-yellow-500 text-white rounded-xl py-5 px-3"><i class="fas fa-sun text-2xl"></i><br>Motivacional</button>
+    <button onclick="mostrarFrase('memorias')" class="bg-purple-500 text-white rounded-xl py-5 px-3"><i class="fas fa-images text-2xl"></i><br>Memórias</button>
+  </div>
 
-        <main class="max-w-3xl mx-auto">
-            <div id="fraseContainer" class="bg-white rounded-2xl shadow-xl p-6 mb-8 text-center min-h-48 flex flex-col items-center justify-center">
-                <p id="fraseExibida" class="text-gray-700 text-xl italic">Do que você precisa hoje?</p>
-                <p id="fraseAutor" class="text-pink-500 mt-2 font-medium hidden">~ Seus filhos amorosos</p>
-            </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <button onclick="surpresa()" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-4 rounded-xl"><i class="fas fa-magic mr-2"></i> Surpreenda-me!</button>
+    <button onclick="playRandomSong()" class="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-6 py-4 rounded-xl"><i class="fas fa-music mr-2"></i> Trilha sonora</button>
+  </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <button onclick="mostrarFrase('biblia')" class="bg-blue-500 text-white rounded-xl py-5 px-3"><i class="fas fa-bible text-2xl"></i><br>Bíblia</button>
-                <button onclick="mostrarFrase('amor')" class="bg-pink-500 text-white rounded-xl py-5 px-3"><i class="fas fa-heart text-2xl"></i><br>Amor</button>
-                <button onclick="mostrarFrase('motivacional')" class="bg-yellow-500 text-white rounded-xl py-5 px-3"><i class="fas fa-sun text-2xl"></i><br>Motivacional</button>
-                <button onclick="mostrarFrase('memorias')" class="bg-purple-500 text-white rounded-xl py-5 px-3"><i class="fas fa-images text-2xl"></i><br>Memórias</button>
-            </div>
+  <audio id="bgMusic"></audio>
+  <p id="songTitle" class="text-center mt-4 text-sm text-blue-600"></p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button onclick="surpresa()" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-4 rounded-xl"><i class="fas fa-magic mr-2"></i> Surpreenda-me!</button>
-                <button onclick="playRandomSong()" class="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-6 py-4 rounded-xl"><i class="fas fa-music mr-2"></i> Trilha sonora</button>
-            </div>
-        </main>
+  <script>
+    const API_KEY = "AIzaSyD1CIKaD9c0quCWk1Hv0YA3kOfWo4md5tE";
+    const FOLDER_ID_FOTOS = "10MdTNnk42jl0XOrTv6EWY4WVdnlSO5Sl";
+    const FOLDER_ID_MUSICAS = "1NTGPQHiKvAeu8ixLpuE6DCqsWNe1ooR5";
 
-        <footer class="text-center mt-12 text-gray-500 text-sm">
-            <p>Feito com <i class="fas fa-heart text-red-500"></i> por seus filhos para a melhor mãe do mundo!</p>
-            <p class="mt-1">© <span id="anoAtual"></span></p>
-        </footer>
-    </div>
+    let fotosMemorias = [];
+    let musicas = [];
 
-    <script>
+    async function listarArquivos(folderId, mimeFilter) {
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'${mimeFilter}'&key=${API_KEY}&fields=files(id,name,mimeType)`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.files.map(file => ({
+        id: file.id,
+        name: file.name,
+        mimeType: file.mimeType,
+        url: `https://drive.google.com/uc?id=${file.id}&export=download`
+      }));
+    }
+
+    async function carregarMidias() {
+      fotosMemorias = await listarArquivos(FOLDER_ID_FOTOS, 'image/');
+      musicas = await listarArquivos(FOLDER_ID_MUSICAS, 'audio/');
+    }
+
     const sheetsUrls = {
-        biblia: 'https://docs.google.com/spreadsheets/d/1WU3RNNRilrYhIDWFIwBTWKzD9zsWFChuDs8AOHTvAqo/gviz/tq?',
-        amor: 'https://docs.google.com/spreadsheets/d/12cIYDymlpyvjWLNp4WQQz5-dJdsaNlFNR1dZRacOmlo/gviz/tq?',
-        motivacional: 'https://docs.google.com/spreadsheets/d/1cHL8zGZ_HsQXnKKC6edMpsDfd6MJdKfh9CAJXi4efYM/gviz/tq?'
+      biblia: 'https://docs.google.com/spreadsheets/d/1WU3RNNRilrYhIDWFIwBTWKzD9zsWFChuDs8AOHTvAqo/gviz/tq?',
+      amor: 'https://docs.google.com/spreadsheets/d/12cIYDymlpyvjWLNp4WQQz5-dJdsaNlFNR1dZRacOmlo/gviz/tq?',
+      motivacional: 'https://docs.google.com/spreadsheets/d/1cHL8zGZ_HsQXnKKC6edMpsDfd6MJdKfh9CAJXi4efYM/gviz/tq?'
     };
 
-    const fotosMemorias = [
-        "https://drive.google.com/uc?id=1EXAMPLE1&export=download"
-    ];
-
-    const musicas = [
-        { title: "Música Relaxante 1", url: "https://drive.google.com/uc?id=1NTGPQHiKvAeu8ixLpuE6DCqsWNe1ooR5&export=download" }
-    ];
-
-    document.getElementById('anoAtual').textContent = new Date().getFullYear();
-    const musicPlayer = document.getElementById('bgMusic');
-    let currentSongIndex = -1;
-    let isPlaying = false;
-
-    document.getElementById('playPauseBtn').addEventListener('click', toggleMusic);
-    document.getElementById('nextBtn').addEventListener('click', playNextSong);
-    document.getElementById('prevBtn').addEventListener('click', playPreviousSong);
-    musicPlayer.addEventListener('ended', playNextSong);
-
     async function buscarDadosPlanilha(tipo) {
-        try {
-            const response = await fetch(sheetsUrls[tipo]);
-            const text = await response.text();
-            const json = JSON.parse(text.substring(47).slice(0, -2));
-            const rows = json.table.rows;
-
-            const dados = [];
-            for (let i = 1; i < rows.length; i++) {
-                const cell = rows[i].c;
-                if (tipo === 'biblia') {
-                    if (cell[0] && cell[1]) {
-                        dados.push({ texto: cell[0].v, referencia: cell[1].v });
-                    }
-                } else {
-                    if (cell[0]) dados.push(cell[0].v);
-                }
-            }
-            if (dados.length === 0) throw new Error();
-            return dados;
-        } catch {
-            throw new Error('Erro ao carregar dados');
+      try {
+        const response = await fetch(sheetsUrls[tipo]);
+        const text = await response.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        const rows = json.table.rows;
+        const dados = [];
+        for (let i = 1; i < rows.length; i++) {
+          const cell = rows[i].c;
+          if (tipo === 'biblia') {
+            if (cell[0] && cell[1]) dados.push({ texto: cell[0].v, referencia: cell[1].v });
+          } else {
+            if (cell[0]) dados.push(cell[0].v);
+          }
         }
+        if (dados.length === 0) throw new Error();
+        return dados;
+      } catch {
+        throw new Error('Erro ao carregar dados');
+      }
     }
 
     async function mostrarFrase(tipo) {
-        const container = document.getElementById('fraseContainer');
-        try {
-            if (tipo === 'memorias') {
-                const foto = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
-                container.innerHTML = `<img src="${foto}" class="w-full h-48 object-cover rounded-xl">`;
-                return;
-            }
-            const dados = await buscarDadosPlanilha(tipo);
-            const item = dados[Math.floor(Math.random() * dados.length)];
-
-            container.innerHTML = tipo === 'biblia' ?
-                `<p class="text-gray-700 text-xl">"${item.texto}"</p><p class="text-pink-500 mt-2 font-medium">~ ${item.referencia}</p>` :
-                `<p class="text-gray-700 text-xl">"${item}"</p><p class="text-pink-500 mt-2 font-medium">~ ${tipo}</p>`;
-        } catch {
-            container.innerHTML = `
-                <p class="text-red-500 text-xl font-bold">Ops, algo deu errado, mãe.</p>
-                <p class="text-gray-700 mt-2">Melhor falar com a gente pra consertar.</p>
-            `;
+      const container = document.getElementById('fraseContainer');
+      try {
+        if (tipo === 'memorias') {
+          const foto = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
+          container.innerHTML = `<img src="${foto.url}" class="w-full h-48 object-cover rounded-xl">`;
+          return;
         }
+        const dados = await buscarDadosPlanilha(tipo);
+        const item = dados[Math.floor(Math.random() * dados.length)];
+        container.innerHTML = tipo === 'biblia'
+          ? `<p class="text-gray-700 text-xl">"${item.texto}"</p><p class="text-pink-500 mt-2 font-medium">~ ${item.referencia}</p>`
+          : `<p class="text-gray-700 text-xl">"${item}"</p><p class="text-pink-500 mt-2 font-medium">~ ${tipo}</p>`;
+      } catch {
+        container.innerHTML = `<p class="text-red-500 text-xl font-bold">Ops, algo deu errado, mãe.</p><p class="text-gray-700 mt-2">Melhor falar com a gente pra consertar.</p>`;
+      }
     }
 
     function surpresa() {
-        const tipos = ['biblia', 'amor', 'motivacional', 'memorias'];
-        const tipo = tipos[Math.floor(Math.random() * tipos.length)];
-        mostrarFrase(tipo);
+      const tipos = ['biblia', 'amor', 'motivacional', 'memorias'];
+      const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+      mostrarFrase(tipo);
     }
 
     function playRandomSong() {
-        let newIndex;
-        do { newIndex = Math.floor(Math.random() * musicas.length); } while (newIndex === currentSongIndex);
-        currentSongIndex = newIndex;
-        const song = musicas[currentSongIndex];
-        document.getElementById('songTitle').textContent = song.title;
-        musicPlayer.src = song.url;
-        musicPlayer.play();
+      const musicPlayer = document.getElementById('bgMusic');
+      const title = document.getElementById('songTitle');
+      const musica = musicas[Math.floor(Math.random() * musicas.length)];
+      musicPlayer.src = musica.url;
+      title.textContent = musica.name;
+      musicPlayer.play().catch(() => alert('Erro ao tocar música.'));
     }
 
-    function playNextSong() {
-        currentSongIndex = (currentSongIndex + 1) % musicas.length;
-        const song = musicas[currentSongIndex];
-        document.getElementById('songTitle').textContent = song.title;
-        musicPlayer.src = song.url;
-        musicPlayer.play();
-    }
-
-    function playPreviousSong() {
-        currentSongIndex = (currentSongIndex - 1 + musicas.length) % musicas.length;
-        const song = musicas[currentSongIndex];
-        document.getElementById('songTitle').textContent = song.title;
-        musicPlayer.src = song.url;
-        musicPlayer.play();
-    }
-
-    function toggleMusic() {
-        if (musicPlayer.paused) {
-            if (!musicPlayer.src) playRandomSong();
-            else musicPlayer.play();
-        } else musicPlayer.pause();
-    }
-    </script>
+    window.onload = carregarMidias;
+  </script>
 </body>
 </html>
