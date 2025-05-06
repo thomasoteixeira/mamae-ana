@@ -6,490 +6,169 @@
     <title>Presente Especial para Ana</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        .floating {
-            animation: float 3s ease-in-out infinite;
-        }
-        .heart-beat {
-            animation: heartbeat 1.5s ease infinite;
-        }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            25% { transform: scale(1.1); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        .fade-in {
-            animation: fadeIn 0.8s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .photo-frame {
-            background: linear-gradient(135deg, #f9d5e5 0%, #e3c1f5 100%);
-            border: 8px solid white;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .music-note {
-            animation: floatNote 4s linear infinite;
-        }
-        @keyframes floatNote {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
-        }
-        .bible-verse {
-            background: linear-gradient(135deg, #f0f7ff 0%, #e0f0ff 100%);
-            border-left: 5px solid #4a6baf;
-        }
-        .now-playing {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            border-left: 5px solid #2196f3;
-        }
-    </style>
 </head>
 <body class="bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen font-sans relative overflow-x-hidden">
-    <!-- Efeitos de fundo -->
     <div id="backgroundEffects"></div>
-    
-    <!-- Player de música -->
     <audio id="bgMusic"></audio>
-    <div id="nowPlaying" class="hidden fixed bottom-4 left-4 right-4 bg-white rounded-xl shadow-xl p-4 max-w-md mx-auto z-50 now-playing">
+    <div id="nowPlaying" class="hidden fixed bottom-4 left-4 right-4 bg-white rounded-xl shadow-xl p-4 max-w-md mx-auto z-50">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-500">Tocando agora:</p>
                 <p id="songTitle" class="font-medium text-blue-600"></p>
             </div>
             <div class="flex items-center space-x-3">
-                <button id="prevBtn" class="text-blue-500 hover:text-blue-700">
-                    <i class="fas fa-step-backward"></i>
-                </button>
-                <button id="playPauseBtn" class="bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600">
-                    <i class="fas fa-play"></i>
-                </button>
-                <button id="nextBtn" class="text-blue-500 hover:text-blue-700">
-                    <i class="fas fa-step-forward"></i>
-                </button>
+                <button id="prevBtn"><i class="fas fa-step-backward text-blue-500"></i></button>
+                <button id="playPauseBtn" class="bg-blue-500 text-white rounded-full p-2"><i class="fas fa-play"></i></button>
+                <button id="nextBtn"><i class="fas fa-step-forward text-blue-500"></i></button>
             </div>
         </div>
     </div>
-    
+
     <div class="container mx-auto px-4 py-8 relative z-10">
-        <!-- Cabeçalho -->
         <header class="text-center mb-8">
             <div class="heart-beat inline-block">
                 <i class="fas fa-heart text-red-500 text-5xl"></i>
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold text-pink-600 mt-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600">
-                Presente Especial para Ana
-            </h1>
-            <p class="text-purple-600 mt-2 text-lg">Um presente cheio de amor para você, mamãe!</p>
-            
-            <!-- Botão de música -->
-            <button id="musicBtn" onclick="toggleMusic()" class="mt-4 bg-white rounded-full p-3 shadow-md hover:shadow-lg transition-all">
-                <i class="fas fa-music text-purple-500 text-xl"></i>
-            </button>
+            <h1 class="text-4xl font-bold text-pink-600 mt-4">Presente Especial para Ana</h1>
+            <p class="text-purple-600 mt-2">Um presente cheio de amor para você, mamãe!</p>
+            <button id="musicBtn" onclick="toggleMusic()" class="mt-4 bg-white rounded-full p-3 shadow-md"><i class="fas fa-music text-purple-500 text-xl"></i></button>
         </header>
 
-        <!-- Conteúdo Principal -->
         <main class="max-w-3xl mx-auto">
-            <!-- Seção de Frase -->
-            <div id="fraseContainer" class="bg-white rounded-2xl shadow-xl p-6 mb-8 text-center min-h-48 flex flex-col items-center justify-center photo-frame">
-                <div id="photoPlaceholder" class="hidden mb-4 w-32 h-32 rounded-full bg-gray-100 overflow-hidden border-4 border-white shadow-md">
-                    <!-- Foto será carregada aqui -->
-                </div>
-                <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed">
-                    Do que você precisa hoje?
-                </p>
+            <div id="fraseContainer" class="bg-white rounded-2xl shadow-xl p-6 mb-8 text-center min-h-48 flex flex-col items-center justify-center">
+                <p id="fraseExibida" class="text-gray-700 text-xl italic">Do que você precisa hoje?</p>
                 <p id="fraseAutor" class="text-pink-500 mt-2 font-medium hidden">~ Seus filhos amorosos</p>
             </div>
 
-            <!-- Botões de Categorias -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <button onclick="mostrarFrase('biblia')" class="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
-                    <i class="fas fa-bible text-3xl mb-3"></i>
-                    <span class="font-medium text-center">Um presente direto do céu</span>
-                </button>
-                
-                <button onclick="mostrarFrase('amor')" class="bg-pink-500 hover:bg-pink-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
-                    <i class="fas fa-heart text-3xl mb-3"></i>
-                    <span class="font-medium text-center">Coisas que Amamos em Você</span>
-                </button>
-                
-                <button onclick="mostrarFrase('motivacional')" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
-                    <i class="fas fa-sun text-3xl mb-3"></i>
-                    <span class="font-medium text-center">Frase Motivacional do Dia</span>
-                </button>
-                
-                <button onclick="mostrarFrase('memorias')" class="bg-purple-500 hover:bg-purple-600 text-white rounded-xl py-5 px-3 transition-all transform hover:scale-105 shadow-lg flex flex-col items-center">
-                    <i class="fas fa-images text-3xl mb-3"></i>
-                    <span class="font-medium text-center">Uma memória feliz</span>
-                </button>
+                <button onclick="mostrarFrase('biblia')" class="bg-blue-500 text-white rounded-xl py-5 px-3"><i class="fas fa-bible text-2xl"></i><br>Bíblia</button>
+                <button onclick="mostrarFrase('amor')" class="bg-pink-500 text-white rounded-xl py-5 px-3"><i class="fas fa-heart text-2xl"></i><br>Amor</button>
+                <button onclick="mostrarFrase('motivacional')" class="bg-yellow-500 text-white rounded-xl py-5 px-3"><i class="fas fa-sun text-2xl"></i><br>Motivacional</button>
+                <button onclick="mostrarFrase('memorias')" class="bg-purple-500 text-white rounded-xl py-5 px-3"><i class="fas fa-images text-2xl"></i><br>Memórias</button>
             </div>
 
-            <!-- Botões de Ação -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                <button onclick="surpresa()" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-8 py-4 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 text-lg font-medium">
-                    <i class="fas fa-magic mr-3"></i> Surpreenda-me!
-                </button>
-                
-                <button onclick="playRandomSong()" class="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-8 py-4 rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 text-lg font-medium">
-                    <i class="fas fa-music mr-3"></i> Trilha sonora de hoje
-                </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button onclick="surpresa()" class="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-6 py-4 rounded-xl"><i class="fas fa-magic mr-2"></i> Surpreenda-me!</button>
+                <button onclick="playRandomSong()" class="bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-6 py-4 rounded-xl"><i class="fas fa-music mr-2"></i> Trilha sonora</button>
             </div>
         </main>
 
-        <!-- Rodapé -->
         <footer class="text-center mt-12 text-gray-500 text-sm">
             <p>Feito com <i class="fas fa-heart text-red-500"></i> por seus filhos para a melhor mãe do mundo!</p>
-            <p class="mt-1">© <span id="anoAtual"></span> - Um presente digital cheio de amor</p>
+            <p class="mt-1">© <span id="anoAtual"></span></p>
         </footer>
     </div>
 
     <script>
-        // URLs das planilhas do Google Sheets
-        const sheetsUrls = {
-            biblia: 'https://docs.google.com/spreadsheets/d/1WU3RNNRilrYhIDWFIwBTWKzD9zsWFChuDs8AOHTvAqo/gviz/tq?',
-            amor: 'https://docs.google.com/spreadsheets/d/12cIYDymlpyvjWLNp4WQQz5-dJdsaNlFNR1dZRacOmlo/gviz/tq?',
-            motivacional: 'https://docs.google.com/spreadsheets/d/1cHL8zGZ_HsQXnKKC6edMpsDfd6MJdKfh9CAJXi4efYM/gviz/tq?'
-        };
+    const sheetsUrls = {
+        biblia: 'https://docs.google.com/spreadsheets/d/1WU3RNNRilrYhIDWFIwBTWKzD9zsWFChuDs8AOHTvAqo/gviz/tq?',
+        amor: 'https://docs.google.com/spreadsheets/d/12cIYDymlpyvjWLNp4WQQz5-dJdsaNlFNR1dZRacOmlo/gviz/tq?',
+        motivacional: 'https://docs.google.com/spreadsheets/d/1cHL8zGZ_HsQXnKKC6edMpsDfd6MJdKfh9CAJXi4efYM/gviz/tq?'
+    };
 
-        // Fotos do Google Drive
-        const fotosMemorias = [
-            "https://drive.google.com/uc?id=1EXAMPLE1&export=download",
-            "https://drive.google.com/uc?id=1EXAMPLE2&export=download",
-            "https://drive.google.com/uc?id=1EXAMPLE3&export=download",
-            "https://drive.google.com/uc?id=1EXAMPLE4&export=download",
-            "https://drive.google.com/uc?id=1EXAMPLE5&export=download"
-        ];
+    const fotosMemorias = [
+        "https://drive.google.com/uc?id=1EXAMPLE1&export=download"
+    ];
 
-        // Lista de músicas do Google Drive
-        const musicas = [
-            { 
-                title: "Música Relaxante 1", 
-                url: "https://drive.google.com/uc?id=1NTGPQHiKvAeu8ixLpuE6DCqsWNe1ooR5&export=download" 
-            },
-            { 
-                title: "Música Relaxante 2", 
-                url: "https://drive.google.com/uc?id=1EXAMPLEMUSIC2&export=download" 
-            },
-            { 
-                title: "Música Inspiradora", 
-                url: "https://drive.google.com/uc?id=1EXAMPLEMUSIC3&export=download" 
-            },
-            { 
-                title: "Canção de Amor", 
-                url: "https://drive.google.com/uc?id=1EXAMPLEMUSIC4&export=download" 
-            },
-            { 
-                title: "Melodia Suave", 
-                url: "https://drive.google.com/uc?id=1EXAMPLEMUSIC5&export=download" 
-            }
-        ];
+    const musicas = [
+        { title: "Música Relaxante 1", url: "https://drive.google.com/uc?id=1NTGPQHiKvAeu8ixLpuE6DCqsWNe1ooR5&export=download" }
+    ];
 
-        // Mensagens padrão caso não consiga acessar as planilhas
-        const mensagensPadrao = {
-            biblia: [
-                { texto: "Porque eu bem sei os pensamentos que tenho a vosso respeito, diz o Senhor; pensamentos de paz, e não de mal, para vos dar o fim que esperais.", referencia: "Jeremias 29:11" },
-                { texto: "Tudo posso naquele que me fortalece.", referencia: "Filipenses 4:13" }
-            ],
-            amor: [
-                "Seu sorriso ilumina nossos dias!",
-                "O jeito que você cuida de nós é único e especial.",
-                "Admiramos sua força e determinação.",
-                "Seu amor incondicional nos inspira todos os dias.",
-                "Você transforma nossa casa em um lar."
-            ],
-            motivacional: [
-                "Hoje é um novo dia cheio de possibilidades!",
-                "Você é mais forte do que imagina.",
-                "Cada pequeno passo te leva mais perto dos seus sonhos.",
-                "Acredite em si mesma como nós acreditamos em você!",
-                "Seu coração é seu maior guia - confie nele."
-            ]
-        };
+    document.getElementById('anoAtual').textContent = new Date().getFullYear();
+    const musicPlayer = document.getElementById('bgMusic');
+    let currentSongIndex = -1;
+    let isPlaying = false;
 
-        // Configurações iniciais
-        document.getElementById('anoAtual').textContent = new Date().getFullYear();
-        const musicPlayer = document.getElementById('bgMusic');
-        let currentSongIndex = -1;
-        let isPlaying = false;
-        
-        // Configurar eventos do player de música
-        document.getElementById('playPauseBtn').addEventListener('click', toggleMusic);
-        document.getElementById('nextBtn').addEventListener('click', playNextSong);
-        document.getElementById('prevBtn').addEventListener('click', playPreviousSong);
-        
-        musicPlayer.addEventListener('ended', playNextSong);
-        musicPlayer.addEventListener('play', () => {
-            isPlaying = true;
-            document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-pause"></i>';
-            document.getElementById('nowPlaying').classList.remove('hidden');
-        });
-        musicPlayer.addEventListener('pause', () => {
-            isPlaying = false;
-            document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-play"></i>';
-        });
-        
-        // Função para buscar dados do Google Sheets
-        async function buscarDadosPlanilha(tipo) {
-            try {
-                const response = await fetch(sheetsUrls[tipo]);
-                const text = await response.text();
-                // Remove o prefixo que o Google Sheets adiciona
-                const json = JSON.parse(text.substring(47).slice(0, -2));
-                
-                // Extrai os dados da tabela
-                const rows = json.table.rows;
-                const dados = [];
-                
-                for (let i = 0; i < rows.length; i++) {
-                    const cell = rows[i].c;
-                    if (tipo === 'biblia') {
-                        dados.push({
-                            texto: cell[0].v,
-                            referencia: cell[1].v
-                        });
-                    } else {
-                        dados.push(cell[0].v);
+    document.getElementById('playPauseBtn').addEventListener('click', toggleMusic);
+    document.getElementById('nextBtn').addEventListener('click', playNextSong);
+    document.getElementById('prevBtn').addEventListener('click', playPreviousSong);
+    musicPlayer.addEventListener('ended', playNextSong);
+
+    async function buscarDadosPlanilha(tipo) {
+        try {
+            const response = await fetch(sheetsUrls[tipo]);
+            const text = await response.text();
+            const json = JSON.parse(text.substring(47).slice(0, -2));
+            const rows = json.table.rows;
+
+            const dados = [];
+            for (let i = 1; i < rows.length; i++) {
+                const cell = rows[i].c;
+                if (tipo === 'biblia') {
+                    if (cell[0] && cell[1]) {
+                        dados.push({ texto: cell[0].v, referencia: cell[1].v });
                     }
-                }
-                
-                return dados;
-            } catch (error) {
-                console.error('Erro ao buscar dados:', error);
-                // Retorna dados padrão em caso de erro
-                return mensagensPadrao[tipo];
-            }
-        }
-        
-        // Função para mostrar frases
-        async function mostrarFrase(tipo) {
-            const container = document.getElementById('fraseContainer');
-            const elementoFrase = document.getElementById('fraseExibida');
-            const autorFrase = document.getElementById('fraseAutor');
-            
-            // Limpa o container
-            container.innerHTML = `
-                <p id="fraseExibida" class="text-gray-700 text-xl md:text-2xl italic leading-relaxed">Carregando...</p>
-                <p id="fraseAutor" class="text-pink-500 mt-2 font-medium"></p>
-            `;
-            
-            const novoElementoFrase = document.getElementById('fraseExibida');
-            const novoAutorFrase = document.getElementById('fraseAutor');
-            
-            // Efeito visual
-            container.classList.remove('bg-white');
-            
-            if (tipo === 'biblia') {
-                container.classList.add('bible-verse');
-                const versiculos = await buscarDadosPlanilha('biblia');
-                const versiculoAleatorio = versiculos[Math.floor(Math.random() * versiculos.length)];
-                novoElementoFrase.textContent = `"${versiculoAleatorio.texto}"`;
-                novoAutorFrase.textContent = `~ ${versiculoAleatorio.referencia}`;
-            } 
-            else if (tipo === 'memorias') {
-                const fotoAleatoria = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
-                container.innerHTML = `
-                    <div class="mb-4 w-full h-48 bg-gray-100 rounded-lg overflow-hidden shadow-md">
-                        <img src="${fotoAleatoria}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x200?text=Carregando+memória...'">
-                    </div>
-                    <p id="fraseExibida" class="text-gray-700 text-xl italic">Uma linda memória nossa!</p>
-                    <p id="fraseAutor" class="text-pink-500 mt-2 font-medium">~ Um momento especial</p>
-                `;
-            }
-            else {
-                container.classList.add('bg-gradient-to-r', 'from-purple-50', 'to-pink-50', 'border-2', 'border-pink-200');
-                const frases = await buscarDadosPlanilha(tipo);
-                const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
-                novoElementoFrase.textContent = `"${fraseAleatoria}"`;
-                novoAutorFrase.textContent = tipo === 'amor' ? `~ Coisas que amamos em você` : `~ Para motivar seu dia`;
-            }
-            
-            novoElementoFrase.classList.add('fade-in');
-            novoAutorFrase.classList.remove('hidden');
-            
-            // Remove a classe após a animação
-            setTimeout(() => {
-                novoElementoFrase.classList.remove('fade-in');
-            }, 800);
-        }
-        
-        // Função surpresa - agora mostra aleatoriamente um dos tipos de conteúdo
-        async function surpresa() {
-            const tipos = ['biblia', 'amor', 'motivacional', 'memorias'];
-            const tipoAleatorio = tipos[Math.floor(Math.random() * tipos.length)];
-            
-            // Adiciona efeitos visuais
-            const container = document.getElementById('fraseContainer');
-            container.innerHTML = `
-                <div class="text-center">
-                    <div class="inline-block">
-                        <i class="fas fa-random text-purple-500 text-4xl mb-4"></i>
-                    </div>
-                    <p class="text-pink-600 font-medium">Escolhendo algo especial para você...</p>
-                </div>
-            `;
-            
-            // Pequeno delay para o efeito
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Mostra o conteúdo aleatório
-            mostrarFrase(tipoAleatorio);
-            
-            // Adiciona alguns corações flutuantes
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => criarCoracao(), i * 300);
-            }
-        }
-        
-        // Função para tocar música aleatória
-        function playRandomSong() {
-            // Para a música atual se estiver tocando
-            if (isPlaying) {
-                musicPlayer.pause();
-            }
-            
-            // Escolhe uma música aleatória diferente da atual
-            let newIndex;
-            do {
-                newIndex = Math.floor(Math.random() * musicas.length);
-            } while (newIndex === currentSongIndex && musicas.length > 1);
-            
-            currentSongIndex = newIndex;
-            const song = musicas[currentSongIndex];
-            
-            // Atualiza a interface
-            document.getElementById('songTitle').textContent = song.title;
-            document.getElementById('nowPlaying').classList.remove('hidden');
-            
-            // Configura e toca a música
-            musicPlayer.src = song.url;
-            musicPlayer.play().catch(e => {
-                console.error("Erro ao reproduzir música:", e);
-                alert("Não foi possível reproduzir a música. Verifique o link ou tente outra.");
-            });
-            
-            // Cria efeitos visuais
-            criarNotasMusicais();
-        }
-        
-        // Função para tocar próxima música
-        function playNextSong() {
-            currentSongIndex = (currentSongIndex + 1) % musicas.length;
-            const song = musicas[currentSongIndex];
-            
-            document.getElementById('songTitle').textContent = song.title;
-            musicPlayer.src = song.url;
-            musicPlayer.play();
-        }
-        
-        // Função para tocar música anterior
-        function playPreviousSong() {
-            currentSongIndex = (currentSongIndex - 1 + musicas.length) % musicas.length;
-            const song = musicas[currentSongIndex];
-            
-            document.getElementById('songTitle').textContent = song.title;
-            musicPlayer.src = song.url;
-            musicPlayer.play();
-        }
-        
-        // Controle de música
-        function toggleMusic() {
-            if (musicPlayer.paused) {
-                if (musicPlayer.src === "") {
-                    playRandomSong();
                 } else {
-                    musicPlayer.play();
+                    if (cell[0]) dados.push(cell[0].v);
                 }
-            } else {
-                musicPlayer.pause();
             }
+            if (dados.length === 0) throw new Error();
+            return dados;
+        } catch {
+            throw new Error('Erro ao carregar dados');
         }
-        
-        // Cria corações flutuantes
-        function criarCoracao() {
-            const cores = ['text-red-400', 'text-pink-400', 'text-purple-400', 'text-yellow-400'];
-            const corAleatoria = cores[Math.floor(Math.random() * cores.length)];
-            
-            const coracao = document.createElement('div');
-            coracao.innerHTML = `<i class="fas fa-heart ${corAleatoria}"></i>`;
-            coracao.className = 'absolute text-2xl opacity-80 z-0';
-            coracao.style.left = Math.random() * 100 + 'vw';
-            coracao.style.top = Math.random() * 100 + 'vh';
-            coracao.style.animation = `float ${3 + Math.random() * 4}s ease-in-out infinite`;
-            coracao.style.fontSize = (20 + Math.random() * 30) + 'px';
-            
-            document.body.appendChild(coracao);
-            
-            // Remove após algum tempo
-            setTimeout(() => {
-                coracao.remove();
-            }, 5000);
-        }
-        
-        function criarNotasMusicais() {
-            for (let i = 0; i < 8; i++) {
-                setTimeout(() => {
-                    const note = document.createElement('div');
-                    note.innerHTML = '<i class="fas fa-music text-purple-300"></i>';
-                    note.className = 'music-note absolute text-2xl z-0';
-                    note.style.left = (10 + Math.random() * 80) + 'vw';
-                    note.style.bottom = '0';
-                    note.style.animationDuration = (3 + Math.random() * 4) + 's';
-                    note.style.fontSize = (20 + Math.random() * 20) + 'px';
-                    
-                    document.body.appendChild(note);
-                    
-                    setTimeout(() => {
-                        note.remove();
-                    }, 4000);
-                }, i * 500);
+    }
+
+    async function mostrarFrase(tipo) {
+        const container = document.getElementById('fraseContainer');
+        try {
+            if (tipo === 'memorias') {
+                const foto = fotosMemorias[Math.floor(Math.random() * fotosMemorias.length)];
+                container.innerHTML = `<img src="${foto}" class="w-full h-48 object-cover rounded-xl">`;
+                return;
             }
+            const dados = await buscarDadosPlanilha(tipo);
+            const item = dados[Math.floor(Math.random() * dados.length)];
+
+            container.innerHTML = tipo === 'biblia' ?
+                `<p class="text-gray-700 text-xl">"${item.texto}"</p><p class="text-pink-500 mt-2 font-medium">~ ${item.referencia}</p>` :
+                `<p class="text-gray-700 text-xl">"${item}"</p><p class="text-pink-500 mt-2 font-medium">~ ${tipo}</p>`;
+        } catch {
+            container.innerHTML = `
+                <p class="text-red-500 text-xl font-bold">Ops, algo deu errado, mãe.</p>
+                <p class="text-gray-700 mt-2">Melhor falar com a gente pra consertar.</p>
+            `;
         }
-        
-        // Cria efeitos de fundo
-        function criarEfeitosFundo() {
-            const effectsContainer = document.getElementById('backgroundEffects');
-            const formas = ['heart', 'star', 'circle', 'square'];
-            
-            for (let i = 0; i < 15; i++) {
-                const forma = formas[Math.floor(Math.random() * formas.length)];
-                const elemento = document.createElement('div');
-                elemento.className = 'absolute opacity-10';
-                elemento.style.left = Math.random() * 100 + 'vw';
-                elemento.style.top = Math.random() * 100 + 'vh';
-                elemento.style.width = (30 + Math.random() * 70) + 'px';
-                elemento.style.height = (30 + Math.random() * 70) + 'px';
-                elemento.style.borderRadius = forma === 'circle' ? '50%' : '0';
-                elemento.style.backgroundColor = `hsl(${Math.random() * 60 + 300}, 70%, 70%)`;
-                elemento.style.transform = `rotate(${Math.random() * 360}deg)`;
-                elemento.style.zIndex = '0';
-                
-                if (forma === 'heart') {
-                    elemento.innerHTML = '<i class="fas fa-heart"></i>';
-                    elemento.className = 'absolute opacity-10 text-4xl';
-                    elemento.style.color = `hsl(${Math.random() * 60 + 300}, 70%, 70%)`;
-                } else if (forma === 'star') {
-                    elemento.innerHTML = '<i class="fas fa-star"></i>';
-                    elemento.className = 'absolute opacity-10 text-4xl';
-                    elemento.style.color = `hsl(${Math.random() * 60 + 300}, 70%, 70%)`;
-                }
-                
-                effectsContainer.appendChild(elemento);
-            }
-        }
-        
-        // Inicializa os efeitos de fundo
-        window.onload = function() {
-            criarEfeitosFundo();
-        };
+    }
+
+    function surpresa() {
+        const tipos = ['biblia', 'amor', 'motivacional', 'memorias'];
+        const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+        mostrarFrase(tipo);
+    }
+
+    function playRandomSong() {
+        let newIndex;
+        do { newIndex = Math.floor(Math.random() * musicas.length); } while (newIndex === currentSongIndex);
+        currentSongIndex = newIndex;
+        const song = musicas[currentSongIndex];
+        document.getElementById('songTitle').textContent = song.title;
+        musicPlayer.src = song.url;
+        musicPlayer.play();
+    }
+
+    function playNextSong() {
+        currentSongIndex = (currentSongIndex + 1) % musicas.length;
+        const song = musicas[currentSongIndex];
+        document.getElementById('songTitle').textContent = song.title;
+        musicPlayer.src = song.url;
+        musicPlayer.play();
+    }
+
+    function playPreviousSong() {
+        currentSongIndex = (currentSongIndex - 1 + musicas.length) % musicas.length;
+        const song = musicas[currentSongIndex];
+        document.getElementById('songTitle').textContent = song.title;
+        musicPlayer.src = song.url;
+        musicPlayer.play();
+    }
+
+    function toggleMusic() {
+        if (musicPlayer.paused) {
+            if (!musicPlayer.src) playRandomSong();
+            else musicPlayer.play();
+        } else musicPlayer.pause();
+    }
     </script>
 </body>
 </html>
