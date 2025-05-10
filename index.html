@@ -89,8 +89,8 @@
     </footer>
   </div>
 
-  <audio id="bgMusic"></audio>
-  <p id="songTitle" class="text-center mt-4 text-sm text-blue-600"></p>
+ <audio id="bgMusic" controls class="hidden mx-auto mt-6"></audio>
+<p id="songTitle" class="text-center mt-4 text-sm text-blue-600"></p>
 
  <script>
 const API_KEY = "AIzaSyD1CIKaD9c0quCWk1Hv0YA3kOfWo4md5tE";
@@ -215,20 +215,55 @@ function surpresa() {
   mostrarFrase(tipo);
 }
 
+let lastSongIndex = -1;
+let githubMusicUrls = [];
+
+async function fetchMusicFilesFromGitHub() {
+  try {
+    const response = await fetch("https://api.github.com/repos/USERNAME/REPOSITORY/contents/music"); // Replace USERNAME and REPOSITORY
+    if (!response.ok) throw new Error("GitHub API error");
+
+    const files = await response.json();
+    githubMusicUrls = files
+      .filter(file => file.name.endsWith(".mp3"))
+      .map(file => ({ name: file.name, url: file.download_url }));
+  } catch (err) {
+    alert("Erro ao carregar músicas do GitHub");
+    console.error(err);
+  }
+}
+
+function getRandomIndexExceptLast(max, last) {
+  let index;
+  do {
+    index = Math.floor(Math.random() * max);
+  } while (index === last && max > 1);
+  return index;
+}
+
 function playRandomSong() {
-  const musicPlayer = document.getElementById('bgMusic');
-  const title = document.getElementById('songTitle');
-  if (!musicas.length) {
-    alert('Ops, nenhuma música disponível no momento.');
+  const musicPlayer = document.getElementById("bgMusic");
+  const title = document.getElementById("songTitle");
+
+  if (!githubMusicUrls.length) {
+    alert("Nenhuma música disponível.");
     return;
   }
-  const musica = musicas[Math.floor(Math.random() * musicas.length)];
-  musicPlayer.src = musica.url;
-  title.textContent = musica.name;
+
+  const index = getRandomIndexExceptLast(githubMusicUrls.length, lastSongIndex);
+  lastSongIndex = index;
+  const song = githubMusicUrls[index];
+
+  musicPlayer.src = song.url;
+  title.textContent = song.name;
+  musicPlayer.classList.remove("hidden");
+
   musicPlayer.play().catch(() => {
-    alert('Ops, não conseguimos tocar essa música.');
+    alert("Ops, não conseguimos tocar essa música.");
   });
 }
+
+window.addEventListener("load", fetchMusicFilesFromGitHub);
 
 document.getElementById('anoAtual').textContent = new Date().getFullYear();
 window.onload = async () => {
