@@ -220,7 +220,7 @@ let githubMusicUrls = [];
 
 async function fetchMusicFilesFromGitHub() {
   try {
-    const response = await fetch("https://api.github.com/repos/USERNAME/REPOSITORY/contents/music"); // Replace USERNAME and REPOSITORY
+    const response = await fetch("https://api.github.com/repos/thomasoteixeira/mamae-ana/contents/music");
     if (!response.ok) throw new Error("GitHub API error");
 
     const files = await response.json();
